@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ChemWasteSort – Enhanced UI</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 40px 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+    .container {
+      max-width: 700px;
+      background: white;
+      margin: auto;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+    button {
+      background: linear-gradient(to right, #3498db, #2980b9);
+      color: white;
+      border: none;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.03);
+      background: linear-gradient(to right, #2980b9, #3498db);
+    }
+    #output {
+      margin-top: 25px;
+      padding: 20px;
+      background-color: #f0f9ff;
+      border-left: 6px solid #3498db;
+      border-radius: 12px;
+      font-size: 1.05em;
+    }
+    .category {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .hazard {
+      margin-top: 8px;
+      font-weight: 600;
+      color: #d35400;
+    }
+    .alert {
+      margin-top: 12px;
+      padding: 10px;
+      background-color: #ffe0e0;
+      border-left: 5px solid #e74c3c;
+      border-radius: 6px;
+      color: #c0392b;
+      font-weight: 500;
+    }
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>ChemWasteSort – Intelligent Waste Sorting</h1>
+  <div class="container">
+    <input type="text" id="chemical" placeholder="Chemical name (e.g., Chloroform)" />
+    <input type="text" id="quantity" placeholder="Quantity (e.g., 25 mL or 5 g)" />
+    <select id="state">
+      <option value="liquid">Liquid</option>
+      <option value="solid">Solid</option>
+      <option value="gas">Gas</option>
+    </select>
+    <input type="text" id="usage" placeholder="Usage type (e.g., solvent, acid, bio)" />
+    <button onclick="classifyWaste()">Classify Waste</button>
+    <div id="output"></div>
+  </div>
+
+  <footer>
+    <p>
+      Developed by:<br>
+      <strong>Dr. Abir Sarbajna</strong> &amp; <strong>Dr. Tapas Ghatak</strong><br>
+      Department of Chemistry, School of Advanced Science<br>
+      Vellore Institute of Technology (VIT), India<br>
+      <em>© 2025 ChemWasteSort | All rights reserved</em>
+    </p>
+  </footer>
+
+  <script>
+    function classifyWaste() {
+      let name = document.getElementById("chemical").value.toLowerCase();
+      let quantity = document.getElementById("quantity").value;
+      let state = document.getElementById("state").value;
+      let usage = document.getElementById("usage").value.toLowerCase();
+
+      let category = "Unclassified";
+      let color = "Black";
+      let hazard = "";
+      let alertMsg = "";
+
+      if (name.includes("chloro") || name.includes("bromo") || name.includes("iodo")) {
+        category = "Halogenated Organic Waste"; color = "Red"; hazard = "☠️ Toxic"; alertMsg = "🚫 Do not mix with non-halogenated organics.";
+      } else if (name.includes("ethanol") || name.includes("toluene") || name.includes("acetone")) {
+        category = "Non-Halogenated Organic Waste"; color = "Yellow"; hazard = "🔥 Flammable"; alertMsg = "🚫 Do not mix with halogenated waste or oxidizers.";
+      } else if (name.includes("hcl") || name.includes("hno") || name.includes("h2so4")) {
+        category = "Inorganic Acid"; color = "Blue"; hazard = "🧪 Corrosive"; alertMsg = "🚫 Avoid mixing with cyanides or reactive bases.";
+      } else if (name.includes("cu") || name.includes("pb") || name.includes("hg") || name.includes("cd")) {
+        category = "Heavy Metal Waste"; color = "White"; hazard = "☠️ Toxic"; alertMsg = "🚫 Avoid mixing with organic solvents.";
+      } else if (name.includes("nacl") || name.includes("kbr") || name.includes("mgso4")) {
+        category = "Inorganic Salt"; color = "Green"; hazard = "⚠️ Irritant";
+      } else if (usage.includes("bio") || usage.includes("blood") || usage.includes("virus")) {
+        category = "Biohazard"; color = "Orange"; hazard = "☣️ Biohazard"; alertMsg = "🚫 Use biohazard container, do not autoclave with chemicals.";
+      } else if (name.includes("needle") || name.includes("syringe") || name.includes("blade")) {
+        category = "Sharps"; color = "Grey"; hazard = "⚠️ Sharp"; alertMsg = "🚫 Use puncture-proof sharps containers.";
+      }
+
+      let result = `
+        <div class="category">Waste Category: ${category}</div>
+        <div><strong>Recommended Bin Color:</strong> <span style="color:${color.toLowerCase()}">${color}</span></div>
+        <div class="hazard"><strong>Hazard Classification:</strong> ${hazard}</div>
+        <div><strong>Quantity:</strong> ${quantity} | State: ${state}</div>
+        ${alertMsg ? `<div class="alert">${alertMsg}</div>` : ""}
+      `;
+      document.getElementById("output").innerHTML = result;
+    }
+  </script>
+</body>
+</html>
